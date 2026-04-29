@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AdminConnect — Hub Opérationnel</title>
+<title>AdminConnect — CRM Clients</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/modals.css">
 </head>
 <body>
 
@@ -17,38 +18,37 @@
     <div class="logo-mark">AC</div>
     <span class="logo-text">AdminConnect</span>
   </div>
-
   <nav class="sidebar-nav">
-    <a href="index.html" class="nav-item active" data-label="CRM Clients">
+    <a href="index.html" class="nav-item active" data-tooltip="CRM Clients">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
       <span>Clients</span>
     </a>
-    <a href="pages/client.html" class="nav-item" data-label="Dossier client">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <a href="pages/client.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <span>Dossiers</span>
     </a>
-    <a href="pages/ia.html" class="nav-item" data-label="IA & Alertes">
+    <a href="pages/ia.html" class="nav-item">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       <span>IA & Alertes</span>
+      <div class="nav-badge" id="notifBadge">4</div>
     </a>
-    <a href="#" class="nav-item" data-label="Timer">
+    <a href="#" class="nav-item" onclick="showToast('Timer — Fonctionnalité Phase 2','info');return false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span>Timer</span>
     </a>
-    <a href="#" class="nav-item" data-label="Documents">
+    <a href="#" class="nav-item" onclick="showToast('Documents — Fonctionnalité Phase 2','info');return false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
       <span>Documents</span>
     </a>
   </nav>
-
   <div class="sidebar-footer">
-    <div class="user-card">
+    <button class="user-card" onclick="openModal('settingsModal')" style="background:none;border:none;cursor:pointer;width:100%;text-align:left">
       <div class="user-avatar">LM</div>
       <div class="user-info">
         <div class="user-name">Laure Macor</div>
         <div class="user-role">Admin indépendante</div>
       </div>
-    </div>
+    </button>
   </div>
 </aside>
 
@@ -62,11 +62,16 @@
       <div class="breadcrumb">Avril 2026 · 12 clients actifs</div>
     </div>
     <div class="topbar-right">
-      <div class="search-box">
+      <div class="search-box" onclick="openSearch()" style="cursor:pointer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Rechercher un client…">
+        <input type="text" placeholder="Rechercher… (⌘K)" readonly style="cursor:pointer">
+        <kbd style="font-family:var(--font-sans);font-size:10.5px;background:var(--slate-100);border:1px solid var(--slate-200);padding:2px 6px;border-radius:4px;color:var(--slate-500);white-space:nowrap">⌘K</kbd>
       </div>
-      <button class="btn-primary">
+      <button class="btn-secondary" onclick="exportCSV()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+      <button class="btn-primary" onclick="openModal('newClientModal')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Nouveau client
       </button>
@@ -75,22 +80,22 @@
 
   <!-- KPI STRIP -->
   <div class="kpi-strip">
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="showToast('Vue CA mensuel détaillée — Phase 2','info')" style="cursor:pointer" title="Cliquez pour le détail">
       <div class="kpi-value">38 400 €</div>
       <div class="kpi-label">CA mensuel</div>
       <div class="kpi-delta positive">↑ +12% vs mars</div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="document.querySelector('.filter-tab:nth-child(3)').click();showToast('Filtre : Devis en attente','info')" style="cursor:pointer">
       <div class="kpi-value">3</div>
       <div class="kpi-label">Devis en attente</div>
       <div class="kpi-delta warning">⚠ dont 1 urgent</div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="document.querySelector('.filter-tab:nth-child(4)').click();showToast('Filtre : Impayés actifs','warning')" style="cursor:pointer">
       <div class="kpi-value">2</div>
       <div class="kpi-label">Impayés actifs</div>
       <div class="kpi-delta danger">↑ +1 ce mois</div>
     </div>
-    <div class="kpi-card">
+    <div class="kpi-card" onclick="window.location='pages/ia.html'" style="cursor:pointer">
       <div class="kpi-value">87%</div>
       <div class="kpi-label">Taux de signature</div>
       <div class="kpi-delta positive">↑ +4pts</div>
@@ -105,231 +110,361 @@
       <button class="filter-tab">Devis envoyé (3)</button>
       <button class="filter-tab">Impayés (2)</button>
     </div>
-    <div class="filter-right">
-      <select class="filter-select">
-        <option>Trier par : Score IA ↓</option>
-        <option>Trier par : Montant ↓</option>
-        <option>Trier par : Date ↓</option>
+    <div style="display:flex;gap:8px;align-items:center">
+      <select class="filter-select" onchange="showToast('Tri appliqué : '+this.options[this.selectedIndex].text,'info')">
+        <option>Score IA ↓</option>
+        <option>Montant ↓</option>
+        <option>Date ↓</option>
+        <option>Nom A→Z</option>
       </select>
     </div>
   </div>
 
-  <!-- CLIENT TABLE -->
+  <!-- TABLE -->
   <div class="table-container">
     <table class="client-table">
       <thead>
         <tr>
           <th>Client</th>
-          <th>Statut</th>
+          <th>Statut <span style="font-weight:400;opacity:.6;font-size:10px">(clic pour changer)</span></th>
           <th>Montant HT</th>
           <th>Dernier contact</th>
           <th>Score IA</th>
           <th>Relance</th>
-          <th></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
 
         <tr class="row-alert" onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#E8F4FD;color:#2B7DC4">FS</div>
-              <div>
-                <div class="client-name">Florent Sauvage</div>
-                <div class="client-meta">Freelance · Consultant RH</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-warning">Devis envoyé</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#E8F4FD;color:#2B7DC4">FS</div>
+            <div><div class="client-name">Florent Sauvage</div><div class="client-meta">Freelance · Consultant RH</div></div>
+          </div></td>
+          <td><span class="badge badge-warning" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer" title="Cliquer pour changer le statut">Devis envoyé</span></td>
           <td class="amount">4 200 €</td>
-          <td class="date-cell">
-            <span>Il y a 8 jours</span>
-            <span class="date-sub">21 avr. 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-danger" style="width:82%"></div></div>
-              <span class="score-num danger">8.2</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Il y a 8 jours</span><span class="date-sub">21 avr. 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-danger" style="width:82%"></div></div><span class="score-num danger">8.2</span></div></td>
           <td><span class="relance-badge relance-urgent">J+8 — Urgente</span></td>
-          <td><button class="action-btn" onclick="event.stopPropagation(); window.location='pages/client.html'">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn" onclick="openModal('relanceModal')" title="Envoyer une relance">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'" title="Voir le dossier">→</button>
+          </td>
         </tr>
 
         <tr onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#F0FBF4;color:#22863A">MC</div>
-              <div>
-                <div class="client-name">Marie Castel</div>
-                <div class="client-meta">TPE · Architecte d'intérieur</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-success">Signé</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#F0FBF4;color:#22863A">MC</div>
+            <div><div class="client-name">Marie Castel</div><div class="client-meta">TPE · Architecte d'intérieur</div></div>
+          </div></td>
+          <td><span class="badge badge-success" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer">Signé</span></td>
           <td class="amount">7 800 €</td>
-          <td class="date-cell">
-            <span>Hier</span>
-            <span class="date-sub">28 avr. 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-ok" style="width:28%"></div></div>
-              <span class="score-num ok">2.8</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Hier</span><span class="date-sub">28 avr. 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-ok" style="width:28%"></div></div><span class="score-num ok">2.8</span></div></td>
           <td><span class="relance-badge relance-none">Aucune</span></td>
-          <td><button class="action-btn">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn" onclick="showToast('Email envoyé à Marie Castel ✓','success')" title="Envoyer un email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'">→</button>
+          </td>
         </tr>
 
         <tr class="row-danger" onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#FEF3F2;color:#D92D20">BM</div>
-              <div>
-                <div class="client-name">Baptiste Morel</div>
-                <div class="client-meta">Artisan · Électricien</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-danger">Impayé</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#FEF3F2;color:#D92D20">BM</div>
+            <div><div class="client-name">Baptiste Morel</div><div class="client-meta">Artisan · Électricien</div></div>
+          </div></td>
+          <td><span class="badge badge-danger" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer">Impayé</span></td>
           <td class="amount">2 350 €</td>
-          <td class="date-cell">
-            <span>Il y a 47 jours</span>
-            <span class="date-sub">12 mars 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-danger" style="width:91%"></div></div>
-              <span class="score-num danger">9.1</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Il y a 47 jours</span><span class="date-sub">12 mars 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-danger" style="width:91%"></div></div><span class="score-num danger">9.1</span></div></td>
           <td><span class="relance-badge relance-med">MED en cours</span></td>
-          <td><button class="action-btn">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn icon-danger" onclick="openModal('medModal')" title="Préparer la mise en demeure">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'">→</button>
+          </td>
         </tr>
 
         <tr onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#FDF6EC;color:#B95000">AL</div>
-              <div>
-                <div class="client-name">Aurélie Laurent</div>
-                <div class="client-meta">Freelance · Graphiste</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-info">En cours</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#FDF6EC;color:#B95000">AL</div>
+            <div><div class="client-name">Aurélie Laurent</div><div class="client-meta">Freelance · Graphiste</div></div>
+          </div></td>
+          <td><span class="badge badge-info" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer">En cours</span></td>
           <td class="amount">5 600 €</td>
-          <td class="date-cell">
-            <span>Il y a 3 jours</span>
-            <span class="date-sub">26 avr. 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-mid" style="width:54%"></div></div>
-              <span class="score-num mid">5.4</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Il y a 3 jours</span><span class="date-sub">26 avr. 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-mid" style="width:54%"></div></div><span class="score-num mid">5.4</span></div></td>
           <td><span class="relance-badge relance-none">Aucune</span></td>
-          <td><button class="action-btn">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn" onclick="showToast('Email envoyé à Aurélie Laurent ✓','success')" title="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'">→</button>
+          </td>
         </tr>
 
         <tr onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#F5F0FF;color:#6E40C9">PD</div>
-              <div>
-                <div class="client-name">Pierre Dubois</div>
-                <div class="client-meta">TPE · Cabinet de conseil</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-success">Signé</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#F5F0FF;color:#6E40C9">PD</div>
+            <div><div class="client-name">Pierre Dubois</div><div class="client-meta">TPE · Cabinet de conseil</div></div>
+          </div></td>
+          <td><span class="badge badge-success" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer">Signé</span></td>
           <td class="amount">12 000 €</td>
-          <td class="date-cell">
-            <span>Aujourd'hui</span>
-            <span class="date-sub">29 avr. 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-ok" style="width:15%"></div></div>
-              <span class="score-num ok">1.5</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Aujourd'hui</span><span class="date-sub">29 avr. 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-ok" style="width:15%"></div></div><span class="score-num ok">1.5</span></div></td>
           <td><span class="relance-badge relance-none">Aucune</span></td>
-          <td><button class="action-btn">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn" onclick="showToast('Email envoyé à Pierre Dubois ✓','success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'">→</button>
+          </td>
         </tr>
 
         <tr onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#F0F9FF;color:#0070A8">SR</div>
-              <div>
-                <div class="client-name">Sophie Renard</div>
-                <div class="client-meta">Freelance · Coach professionnel</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-warning">Devis envoyé</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#F0F9FF;color:#0070A8">SR</div>
+            <div><div class="client-name">Sophie Renard</div><div class="client-meta">Freelance · Coach professionnel</div></div>
+          </div></td>
+          <td><span class="badge badge-warning" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer">Devis envoyé</span></td>
           <td class="amount">1 800 €</td>
-          <td class="date-cell">
-            <span>Il y a 5 jours</span>
-            <span class="date-sub">24 avr. 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-mid" style="width:61%"></div></div>
-              <span class="score-num mid">6.1</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Il y a 5 jours</span><span class="date-sub">24 avr. 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-mid" style="width:61%"></div></div><span class="score-num mid">6.1</span></div></td>
           <td><span class="relance-badge relance-soon">Programmée J+10</span></td>
-          <td><button class="action-btn">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn" onclick="openModal('relanceModal')" title="Relance">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'">→</button>
+          </td>
         </tr>
 
         <tr onclick="window.location='pages/client.html'">
-          <td>
-            <div class="client-cell">
-              <div class="client-avatar" style="background:#F0FBF4;color:#22863A">TM</div>
-              <div>
-                <div class="client-name">Thomas Mercier</div>
-                <div class="client-meta">Artisan · Plombier-chauffagiste</div>
-              </div>
-            </div>
-          </td>
-          <td><span class="badge badge-success">Signé</span></td>
+          <td><div class="client-cell">
+            <div class="client-avatar" style="background:#F0FBF4;color:#22863A">TM</div>
+            <div><div class="client-name">Thomas Mercier</div><div class="client-meta">Artisan · Plombier-chauffagiste</div></div>
+          </div></td>
+          <td><span class="badge badge-success" onclick="event.stopPropagation();cycleStatus(this)" style="cursor:pointer">Signé</span></td>
           <td class="amount">3 200 €</td>
-          <td class="date-cell">
-            <span>Il y a 2 jours</span>
-            <span class="date-sub">27 avr. 2026</span>
-          </td>
-          <td>
-            <div class="score-cell">
-              <div class="score-bar"><div class="score-fill score-ok" style="width:22%"></div></div>
-              <span class="score-num ok">2.2</span>
-            </div>
-          </td>
+          <td class="date-cell"><span>Il y a 2 jours</span><span class="date-sub">27 avr. 2026</span></td>
+          <td><div class="score-cell"><div class="score-bar"><div class="score-fill score-ok" style="width:22%"></div></div><span class="score-num ok">2.2</span></div></td>
           <td><span class="relance-badge relance-none">Aucune</span></td>
-          <td><button class="action-btn">→</button></td>
+          <td class="actions-cell" onclick="event.stopPropagation()">
+            <button class="icon-btn" onclick="showToast('Email envoyé à Thomas Mercier ✓','success')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </button>
+            <button class="icon-btn" onclick="window.location='pages/client.html'">→</button>
+          </td>
         </tr>
 
       </tbody>
     </table>
   </div>
 
-  <!-- AI ALERT BANNER -->
+  <!-- AI BANNER -->
   <div class="ai-banner">
     <div class="ai-banner-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     </div>
     <div class="ai-banner-content">
       <div class="ai-banner-label">Analyse IA · Généré automatiquement — Vérifiez avant de décider</div>
-      <div class="ai-banner-text">2 dossiers nécessitent votre attention immédiate : <strong>Florent Sauvage</strong> (devis sans réponse depuis 8 jours, risque de perte) et <strong>Baptiste Morel</strong> (impayé 47 jours, prêt pour mise en demeure). Recommandation : traiter ces deux cas avant la fin de semaine.</div>
+      <div class="ai-banner-text">2 dossiers nécessitent votre attention : <strong>Florent Sauvage</strong> (8 jours sans réponse) et <strong>Baptiste Morel</strong> (impayé J+47, MED recommandée).</div>
     </div>
-    <a href="pages/ia.html" class="ai-banner-cta">Voir le rapport complet →</a>
+    <div style="display:flex;gap:8px;flex-shrink:0;align-items:center">
+      <button onclick="openModal('relanceModal')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12.5px;font-family:var(--font-sans)">Relancer FS</button>
+      <a href="pages/ia.html" class="ai-banner-cta">Rapport complet →</a>
+    </div>
   </div>
 
 </main>
 
+<!-- ===================== MODALS ===================== -->
+
+<!-- SEARCH -->
+<div id="searchModal" class="modal-backdrop" style="display:none">
+  <div class="modal" style="max-width:560px;padding:0;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1.5px solid var(--slate-100)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#8A8880" stroke-width="1.5" width="16" height="16"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Rechercher un client, un document, une alerte…" style="flex:1;border:none;outline:none;font-family:var(--font-sans);font-size:14px;background:transparent;color:var(--slate-900)">
+      <kbd style="font-family:var(--font-sans);font-size:10.5px;background:var(--slate-100);border:1px solid var(--slate-200);padding:2px 7px;border-radius:4px;color:var(--slate-500)">Échap</kbd>
+    </div>
+    <div id="searchResults" style="padding:8px 0;max-height:320px;overflow-y:auto">
+      <div style="padding:20px;text-align:center;color:#8A8880;font-size:13px">Tapez pour rechercher un client, document ou alerte…</div>
+    </div>
+    <div style="padding:10px 18px;border-top:1px solid var(--slate-100);font-size:11.5px;color:var(--slate-400);display:flex;gap:16px">
+      <span>↑↓ Naviguer</span><span>↵ Ouvrir</span><span>Échap Fermer</span>
+    </div>
+  </div>
+</div>
+
+<!-- NOUVEAU CLIENT -->
+<div id="newClientModal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nouveau client</div>
+      <button class="modal-close" onclick="closeModal('newClientModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Nom complet *</label>
+        <input id="nc_nom" type="text" class="form-input" placeholder="Marie Dupont">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input id="nc_email" type="email" class="form-input" placeholder="marie@exemple.fr">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Téléphone</label>
+          <input type="tel" class="form-input" placeholder="06 12 34 56 78">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select id="nc_type" class="form-input">
+            <option>Freelance</option>
+            <option>Artisan</option>
+            <option>TPE</option>
+            <option>PME</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Note initiale</label>
+        <textarea class="form-input" rows="3" placeholder="Contexte, source du contact, points d'attention…" style="resize:vertical"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('newClientModal')">Annuler</button>
+      <button class="btn-primary" onclick="submitNewClient()">Créer le client</button>
+    </div>
+  </div>
+</div>
+
+<!-- RELANCE -->
+<div id="relanceModal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Envoyer une relance</div>
+      <button class="modal-close" onclick="closeModal('relanceModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--coral-light);border:1.5px solid #F4B08A;border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#7A2E0A">
+        ⚠ Devis #2026-047 · Florent Sauvage · J+8 sans réponse · 4 200 € HT
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type de relance</label>
+        <select class="form-input" onchange="updateRelancePreview(this.value)">
+          <option value="amiable">Relance amiable (J+8)</option>
+          <option value="rappel">Rappel renforcé (J+15)</option>
+          <option value="premed">Pré-mise en demeure (J+30)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Aperçu du message</label>
+        <div id="relancePreview" style="background:var(--slate-50);border:1.5px solid var(--slate-200);border-radius:8px;padding:14px;font-size:13px;color:var(--slate-700);line-height:1.6">
+          Bonjour Florent,<br><br>
+          Je me permets de revenir vers vous concernant le devis #2026-047 (4 200 € HT) transmis le 21 avril. Pourriez-vous me faire part de votre retour ?<br><br>
+          Bien cordialement,<br>
+          <em>Laure Macor — Gestion Clé Admin</em>
+        </div>
+      </div>
+      <div style="font-size:11.5px;color:var(--slate-400);margin-top:8px;font-style:italic">Template rédigé · Envoi via Brevo · Log conservé 5 ans</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('relanceModal')">Annuler</button>
+      <button class="btn-primary" id="relanceBtnMain" onclick="sendRelance()">Envoyer la relance</button>
+    </div>
+  </div>
+</div>
+
+<!-- MISE EN DEMEURE -->
+<div id="medModal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" style="color:var(--red)">⚠ Mise en demeure</div>
+      <button class="modal-close" onclick="closeModal('medModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#FEF3F2;border:1.5px solid #FECDCA;border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.55;color:#7A271A">
+        <strong>Baptiste Morel · Impayé 2 350 € · J+47</strong><br>
+        Le seuil de mise en demeure est atteint. Ce document est régi par l'article 1344 du Code Civil. <strong>Il ne sera pas envoyé automatiquement</strong> — validation humaine et juriste requises avant tout envoi.
+      </div>
+      <div class="form-group">
+        <label class="form-label">Montant réclamé</label>
+        <input type="text" class="form-input" value="2 350,00 €">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Délai accordé</label>
+        <select class="form-input">
+          <option>8 jours ouvrés</option>
+          <option>15 jours</option>
+          <option>30 jours</option>
+        </select>
+      </div>
+      <div style="background:var(--slate-50);border-radius:8px;padding:12px 14px;font-size:12.5px;color:var(--slate-500);line-height:1.5">
+        Le document sera préparé par le juriste Alpha No_Code et soumis pour validation avant tout envoi. Aucune action irréversible ne sera effectuée sans votre accord explicite.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('medModal')">Annuler</button>
+      <button class="btn-primary" style="background:var(--red)" onclick="sendMED()">Préparer la MED</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settingsModal" class="modal-backdrop" style="display:none">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <div class="modal-title">Paramètres</div>
+      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--slate-100)">
+          <div><div style="font-size:13.5px;font-weight:500">Notifications email</div><div style="font-size:12px;color:var(--slate-500);margin-top:2px">Alertes et rapports</div></div>
+          <label class="toggle"><input type="checkbox" checked onchange="showToast(this.checked?'Notifications activées':'Notifications désactivées','info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--slate-100)">
+          <div><div style="font-size:13.5px;font-weight:500">Relances automatiques</div><div style="font-size:12px;color:var(--slate-500);margin-top:2px">Activer le workflow n8n</div></div>
+          <label class="toggle"><input type="checkbox" checked onchange="showToast(this.checked?'Relances auto activées':'Relances auto désactivées','info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--slate-100)">
+          <div><div style="font-size:13.5px;font-weight:500">Rapport mensuel IA</div><div style="font-size:12px;color:var(--slate-500);margin-top:2px">Généré le 1er du mois</div></div>
+          <label class="toggle"><input type="checkbox" checked onchange="showToast('Préférence mise à jour','info')"><span class="toggle-slider"></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0">
+          <div><div style="font-size:13.5px;font-weight:500">Seuil de relance (jours)</div><div style="font-size:12px;color:var(--slate-500);margin-top:2px">Déclencheur relance amiable</div></div>
+          <select class="form-input" style="width:70px" onchange="showToast('Seuil mis à jour : J+'+this.value,'success')">
+            <option>5</option><option>7</option><option>10</option><option>14</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('settingsModal')">Fermer</button>
+      <button class="btn-primary" onclick="closeModal('settingsModal');showToast('Paramètres enregistrés ✓','success')">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/app.js"></script>
+<script>
+function updateRelancePreview(type) {
+  const p = document.getElementById('relancePreview');
+  if (!p) return;
+  const templates = {
+    amiable: `Bonjour Florent,<br><br>Je me permets de revenir vers vous concernant le devis #2026-047 (4 200 € HT) transmis le 21 avril. Pourriez-vous me faire part de votre retour ?<br><br>Bien cordialement,<br><em>Laure Macor — Gestion Clé Admin</em>`,
+    rappel: `Bonjour Florent,<br><br>Je reviens vers vous pour la seconde fois concernant le devis #2026-047. Sans retour de votre part avant le <strong>10 mai 2026</strong>, je me verrai dans l'obligation d'envisager d'autres démarches.<br><br>Bien cordialement,<br><em>Laure Macor — Gestion Clé Admin</em>`,
+    premed: `Madame, Monsieur,<br><br>Malgré mes précédents rappels, le devis #2026-047 d'un montant de <strong>4 200 € HT</strong> demeure sans réponse. Je vous mets en demeure de me répondre dans un délai de 8 jours ouvrés.<br><br><em>Ce message a valeur de mise en demeure au sens de l'article 1344 du Code Civil.</em><br><br>Laure Macor — Gestion Clé Admin`,
+  };
+  p.innerHTML = templates[type] || templates.amiable;
+}
+</script>
 </body>
 </html>
